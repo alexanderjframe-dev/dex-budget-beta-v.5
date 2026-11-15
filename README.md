@@ -1,60 +1,41 @@
-# Dex Budget — Guided Beta v1.4
+# Dex Budget — Ambient Studio Beta v1.5
 
-A private, offline-capable mobile web app with guided budget recommendations, a dedicated Bills tab, and optional appearance customization. Deployable to GitHub Pages at no cost.
+A calm, adaptive budgeting beta for regular and variable-income users. v1.5 introduces a more realistic-looking live background engine and a small customization studio **without changing the financial calculation engine**.
 
-## Upload to GitHub Pages
+## What changed in v1.5
 
-1. **Before updating**, open your installed Dex Budget app and choose **History → Data & backup → Export backup**. Save the JSON somewhere you can find it.
-2. Extract the ZIP on your computer.
-3. In your existing GitHub repository, choose **Add file → Upload files**.
-4. Upload the **11 files inside** the extracted folder (including both `wallpaper-*.png` images); don't upload just the ZIP or the folder itself.
-5. Commit the changes to the branch used by GitHub Pages (usually `main`).
-6. Confirm **Settings → Pages** is set to **Deploy from a branch → main → / (root)**.
-7. Reopen your existing Pages link. If it still looks old, fully close and reopen the app or refresh Safari. The version label should show **GUIDED BETA v1.4**.
+- Reworked bubbles with independent motion, different apparent depths, asymmetrical reflections, iridescent edges, and transparent centers. This is *stylized computer graphics*, not physically exact fluid simulation or a video.
+- New **Fireflies** and **Rain on Glass** backgrounds alongside Original, Bubbles, Aurora, Ocean, Starlight, and two graffiti wallpapers.
+- **Atmosphere intensity**: Subtle, Balanced, Immersive.
+- **Motion speed**: Slow drift, Natural, Lively.
+- **Full-screen preview** so you can experience the motion without cards covering it.
+- **Quiet while entering amounts** reduces visual intensity when input/select controls have focus (on by default).
+- Retains original mint/navy as the default; existing color presets and background-matching suggestions still work.
+- Motion stops in background tabs, respects system Reduce Motion, and caps rendering frame rate/resolution for better mobile battery life.
 
-If you set up a different GitHub repository or domain, browser storage **does not migrate automatically**. Export a JSON backup from the old site, import it at **History → Data & backup** on the new site.
+## Updating your GitHub Pages app
 
-## New in v1.4
+**Backup your data first:** Dex Budget → History → Data & backup → Export backup.
 
-- **Bills is its own tab**: Upcoming, Paid history, Add / Edit.
-- Funding bars show how much is protected for each bill and how much is still unfunded.
-- Due dates and repeating schedules: one-time, weekly, biweekly, monthly, yearly.
-- **Mark paid** is an explicit action. It records exactly one expense in Dex, uses the bill's previously protected allocation, and advances the next due date *once* for repeating bills. Don't also record the same payment under Add.
-- Previously saved bills default to **One time** until edited. This avoids silently assuming a recurrence for existing data.
-- **More → Appearance**: Original navy / mint theme, animated Aurora / Ocean / Starlight backgrounds, 2 original graffiti PNG wallpapers, 5 palette presets, custom accent, recommended color matches, automatic matching toggle, animation toggle, reset.
-- Respects system **Reduce Motion**; backgrounds never cover the cards or reduce their text contrast.
-- Financial data is retained in the old localStorage key (`dex_budget_guided_beta_v1`), with an optional backward-compatible `appearance` field. Exported JSON includes appearance settings.
+The project is static. GitHub Pages settings are `Deploy from a branch / main / (root)` and `.nojekyll` ensures the raw files are published rather than transformed by Jekyll. If publishing manually, upload the contents of this folder to the repository root (not the enclosing folder or ZIP). Keep all files together.
 
-## Important beta boundaries
+If you're using the existing v.5 repository at `https://alexanderjframe-dev.github.io/dex-budget-beta-v.5/`, opening the same URL after deployment preserves your *browser's* existing Dex data. Data doesn't automatically transfer to a new browser, device, or GitHub Pages URL. A service worker may require closing and reopening the home-screen app once or twice after a new release. **Don't clear Safari website data to refresh** unless you have a backup.
 
-- This is a budgeting prototype, **not a bank-connected app**. It doesn't transfer, withdraw, or protect real money.
-- The safe-to-spend figure is a **planning estimate**, not a verified bank balance. It may not cover all future obligations beyond its planning window.
-- Recording a bill payment under Add does **not** automatically mark that bill paid. Use **Bills → Mark paid** for a payment you actually made.
-- If you delete a bill payment from History later, the recurring bill's due date is **not** automatically reversed; edit the bill date yourself.
-- Existing bills do not become recurring automatically: use **Edit** to choose the payment frequency.
-- Bills only roll forward when you explicitly mark them paid; overdue bills remain until you update them.
-- Tax reserves are configurable estimates and are not formal tax calculations.
-- Data is stored on the device (localStorage). Clearing site data may remove it. Back up regularly.
-- Wallpapers are local files, not downloaded from Apple, and the animated options are original CSS effects.
+## How to test
+
+1. More → Appearance → Bubbles · realistic. Use **Explore full-screen preview** and watch the spheres rise at different speeds.
+2. Select **Immersive** and **Lively**, then return to **Subtle** and **Slow drift**.
+3. Switch to Fireflies and Rain on Glass. Try the recommended matching palette.
+4. Check **Quiet background while entering amounts**: focus a money field and see the background fade.
+5. Turn off live motion or enable iPhone's Reduce Motion setting. Animations should stop.
+6. Check Bills, Add, Plan, and History. Financial records should still behave exactly as in v1.4. Export a backup for good measure.
+
+## Privacy and financial limitations
+
+The animation canvas draws decorations only and does not read any income, transaction, or account data. Dex stores its finance ledger locally in the same `dex_budget_guided_beta_v1` browser storage key used previously, with backward-compatible appearance fields.
+
+Dex Budget remains **an early calculation prototype**, not a bank-connected finance service. Suggested allocations do not move money. Safe-to-spend is an estimate, not a verified bank balance or a promise that all future bills are covered; bills are only advanced when marked paid in the app. Tax reserves are configurable estimates. Export backups regularly.
 
 ## Files
 
-- `index.html` — responsive interface
-- `app.js` — calculations, recurring bills, data, appearance, guided recommendations
-- `sw.js` — offline caching with v1.4 cache bump
-- `manifest.webmanifest` — iPhone app manifest
-- `icon.svg`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` — icons
-- `wallpaper-neon-tag.png`, `wallpaper-ink-tag.png` — original PNG graffiti backgrounds
-- `README.md` — these instructions
-
-## Smoke test
-
-1. Open Bills, add a $40 monthly bill with a due date.
-2. Confirm it appears in Upcoming, then tap Mark paid **only if it was actually paid**. The payment should appear in Paid history, and the next month's due date should display.
-3. Open More → Appearance, try Aurora, then select the Ice Blue scheme; switch to the graffiti wallpaper and apply the recommended palette.
-4. Refresh and verify the selections persist.
-5. Export backup and verify it is a JSON file before making bigger changes.
-
-## Live wallpapers (v1.4)
-
-More → Appearance → Bubbles, Ocean, Aurora, Starlight, or Graffiti for individually moving effects. Motion can be disabled, respects iOS Reduce Motion, and pauses when the tab is not visible. `motion.js` draws decorative canvas effects only and never reads financial data.
+`index.html` app UI and styles; `app.js` financial logic and customization settings; `motion.js` decorative Canvas ambient engine; `sw.js` offline cache; `manifest.webmanifest` app manifest; icons; two original graffiti PNGs; `.nojekyll` GitHub Pages static configuration; and this README.

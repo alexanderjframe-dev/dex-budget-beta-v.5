@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <title>Dex Budget — Guided Beta v1.4</title>
+  <title>Dex Budget — Ambient Studio Beta v1.5</title>
   <style>
     :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#edf3ff;background:#0b1220;color-scheme:dark;
       --bg:#0b1220;--surface:#152136;--surface-2:#0d1a2d;--line:#28384f;--mint:#54d7b0;--mint-soft:#7edbc0;--text:#edf3ff;--muted:#a9b8d0;--dim:#8094b1;--amber:#eac58b;--rose:#ffadb1}
@@ -154,6 +154,29 @@
     @media(prefers-reduced-motion:reduce){.wallpaper-layer{animation:none!important;transition:none!important}.fund-fill{transition:none!important}}
     body[data-motion=off] .wallpaper-layer{animation:none!important;will-change:auto}
 
+
+    /* Dex v1.5: cinematic atmosphere engine and a readable customization studio */
+    body[data-wallpaper=fireflies] .wallpaper-layer{opacity:.74;background:radial-gradient(ellipse at 24% 80%,#214b425c,transparent 58%),radial-gradient(ellipse at 85% 15%,#226d5662,transparent 55%),linear-gradient(165deg,#071b26,#102821 50%,#061b29)}
+    body[data-wallpaper=rain] .wallpaper-layer{opacity:.85;background:radial-gradient(ellipse at 45% -10%,#6583b64a,transparent 56%),linear-gradient(145deg,#061429,#12283f 47%,#071321)}
+    .wp-fireflies{background:radial-gradient(circle at 32% 32%,#ffffca 0 2px,#89d6ad9b 3px,transparent 17px),radial-gradient(circle at 72% 67%,#ffe9ae 0 2px,#4bbf9a99 3px,transparent 21px),linear-gradient(135deg,#122b32,#0c161d)}
+    .wp-rain{background:repeating-linear-gradient(112deg,transparent 0 8px,#92cbeb4a 9px 10px,transparent 11px 27px),linear-gradient(145deg,#142d46,#07121e)}
+    .ambient-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 16px}
+    .ambient-grid label{margin-top:6px}.ambient-grid select{min-width:0}
+    .ambient-note{border-left:2px solid var(--mint);padding:7px 12px;background:var(--soft-highlight);border-radius:0 10px 10px 0;color:var(--text);font-size:12px;line-height:1.5;margin-top:14px}
+    body[data-focus-motion=on].is-editing #dexMotion{opacity:.12}
+    .wallpaper-preview:not([open]){display:none}
+    .wallpaper-preview{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(32px + env(safe-area-inset-bottom,0px));border:0;box-shadow:none;background:transparent;color:var(--text);overflow:hidden;pointer-events:none}
+    .wallpaper-preview[open]{display:flex;flex-direction:column;align-items:center;justify-content:space-between}
+    .wallpaper-preview::backdrop{background:rgba(3,9,16,.11);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .wallpaper-preview>*{pointer-events:auto}
+    .wallpaper-preview .preview-head{font-size:13px;text-align:center;max-width:360px;line-height:1.5;color:#ecfbff;text-shadow:0 2px 10px #031018}
+    .wallpaper-preview .preview-foot{display:flex;gap:10px;align-items:center;flex-direction:column;text-align:center;max-width:360px;background:#101b2de3;border:1px solid #ffffff4a;padding:15px;border-radius:22px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .wallpaper-preview .preview-foot p{margin:0 0 5px;font-size:12px}
+    .wallpaper-preview .preview-foot button{min-width:190px}
+    body.previewing main,body.previewing nav.nav-shell,body.previewing .feedback-toast{opacity:0;pointer-events:none}
+    @media(max-width:365px){.ambient-grid{grid-template-columns:1fr}.wallpaper-preview .preview-foot{width:100%}}
+    @media(prefers-reduced-motion:reduce){.wallpaper-preview{transition:none!important}}
+
   </style>
 </head>
 <body data-wallpaper="classic" data-motion="on">
@@ -170,7 +193,7 @@
 </svg>
 <main>
   <header class="topbar">
-    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div class="brand-name">DEX BUDGET<small>GUIDED BETA v1.4</small></div></div>
+    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div class="brand-name">DEX BUDGET<small>AMBIENT BETA v1.5</small></div></div>
     <button type="button" class="topbtn" id="openTour">↗ &nbsp;App tour</button>
   </header>
 
@@ -294,7 +317,7 @@
       <div class="card"><span class="eyebrow">LIVE PREVIEW</span><h2 style="margin-top:8px">Your Dex, your style.</h2>
         <div class="style-preview"><span class="kicker">Estimated safe to spend</span><div class="preview-big">$142.50</div><div class="tiny">Sample only · Your actual budget is unchanged</div></div>
       </div>
-      <div class="card"><h2>Choose a background</h2><p class="tiny">Living backgrounds with individual drifting bubbles, glows, and particles, plus two graffiti wallpapers. All graphics stay behind your information.</p>
+      <div class="card"><h2>Choose a background</h2><p class="tiny">Live bubbles, flowing light, fireflies, rain, and original graffiti artwork. Everything stays behind your numbers.</p>
         <div id="wallpaperOptions" class="wallpaper-grid" role="group" aria-label="Background presets"></div>
       </div>
       <div class="card"><h2>Color schemes</h2><p class="tiny">Try a preset or choose your own accent. Your financial data stays exactly the same.</p>
@@ -303,10 +326,19 @@
         <div class="suggestion" id="paletteSuggestion" aria-live="polite"></div>
         <label class="check-row"><input type="checkbox" id="autoMatch"> Automatically apply the suggested palette when changing backgrounds</label>
       </div>
-      <div class="card"><h2>Motion & accessibility</h2><label class="check-row"><input type="checkbox" id="enableMotion" checked> Enable floating bubbles and live background effects</label><p class="tiny">Dex always respects your device's Reduce Motion preference, even if animation is enabled here.</p>
-        <button id="resetAppearance" type="button" class="secondary" style="width:100%">Reset to original Dex look</button>
+      <div class="card"><span class="eyebrow">AMBIENT STUDIO · NEW</span><h2 style="margin-top:9px">Make it move naturally.</h2>
+        <p class="tiny">Real-time bubbles with reflective rims and depth, flowing light, soft fireflies, or rain behind your budget. Your information remains in front.</p>
+        <div class="ambient-grid">
+          <div><label for="motionIntensity">Amount of atmosphere</label><select id="motionIntensity"><option value="1">Subtle</option><option value="2">Balanced</option><option value="3">Immersive</option></select></div>
+          <div><label for="motionPace">Movement speed</label><select id="motionPace"><option value="calm">Slow drift</option><option value="natural">Natural</option><option value="lively">Lively</option></select></div>
+        </div>
+        <label class="check-row"><input type="checkbox" id="enableMotion" checked> Enable live atmosphere</label>
+        <label class="check-row" style="margin-top:16px"><input type="checkbox" id="focusMotion" checked> Quiet background while entering amounts</label>
+        <div class="ambient-note">These are lightweight animated effects, not videos. Your device's Reduce Motion setting always takes priority.</div>
+        <div class="actions"><button type="button" id="previewWallpaper">Explore full-screen preview</button></div>
+        <button id="resetAppearance" type="button" class="secondary" style="width:100%;margin-top:12px">Reset to original Dex look</button>
       </div>
-      <div class="hint">Appearance choices are stored on this device and included in a Dex backup. Live backgrounds are generated on your device—not downloaded videos. They pause when Dex is in the background.</div>
+      <div class="hint">Appearance choices are stored on this device and included in a Dex backup. Animated backgrounds are generated locally—no videos or external services.</div>
     </div>
   <div id="more-help" class="subpanel hidden" aria-label="Help and walkthrough">
     <div class="section-heading"><span class="eyebrow">HELP WHEN YOU NEED IT</span><h1>Let's make it clear.</h1><p>No financial jargon required.</p></div>
@@ -341,6 +373,10 @@
   <button class="plainlink" id="tourSkip" type="button">Skip walkthrough</button>
 </dialog>
 <dialog id="infoModal" class="modal" aria-labelledby="infoTitle"><small class="eyebrow">QUICK EXPLANATION</small><h2 id="infoTitle"></h2><p id="helpBody"></p><button id="closeInfo" type="button">Got it</button></dialog>
+<dialog id="wallpaperPreview" class="wallpaper-preview" aria-label="Live wallpaper preview">
+  <div class="preview-head"><strong>DEX · AMBIENT STUDIO</strong><div>Watch the background move without the budget cards in the way.</div></div>
+  <div class="preview-foot"><p>Motion is decorative. No financial data is used to generate the scene.</p><button type="button" id="closeWallpaperPreview">Back to my budget</button></div>
+</dialog>
 <script src="app.js"></script>
 <script src="motion.js"></script>
 </body>

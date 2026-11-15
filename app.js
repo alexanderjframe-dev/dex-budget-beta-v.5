@@ -160,7 +160,7 @@ $('newBillShortcut').onclick=()=>{clearBillForm();showBillsSection('edit')};
 $('cancelBillEdit').onclick=()=>{clearBillForm();showBillsSection('upcoming')};
 
 /* Appearance — deliberately separate from any financial calculation. */
-const WALLPAPERS=[['classic','Original','wp-classic'],['bubbles','Bubbles · live','wp-bubbles'],['aurora','Aurora · motion','wp-aurora'],['tide','Ocean · motion','wp-tide'],['stars','Starlight · motion','wp-stars'],['neon','Graffiti · Neon','wp-neon'],['ink','Graffiti · Ink','wp-ink']];
+const WALLPAPERS=[['classic','Original','wp-classic'],['bubbles','Bubbles · realistic','wp-bubbles'],['aurora','Aurora glow','wp-aurora'],['tide','Ocean · motion','wp-tide'],['stars','Starlight · motion','wp-stars'],['neon','Graffiti · Neon','wp-neon'],['ink','Graffiti · Ink','wp-ink'],['fireflies','Fireflies · live','wp-fireflies'],['rain','Rain on glass','wp-rain']];
 const PALETTES={
   dex:{name:'Dex mint',accent:'#54d7b0',soft:'#7edbc0',bg:'#0b1220',surface:'#152136',surface2:'#0d1a2d',line:'#28384f'},
   ice:{name:'Ice blue',accent:'#6cbfff',soft:'#a2d6ff',bg:'#081427',surface:'#13253c',surface2:'#0d1b30',line:'#29465f'},
@@ -168,11 +168,11 @@ const PALETTES={
   sunset:{name:'Coral',accent:'#ffa88a',soft:'#ffceba',bg:'#1b1422',surface:'#30213a',surface2:'#231a2e',line:'#584051'},
   gold:{name:'Gold',accent:'#ffce75',soft:'#ffe5aa',bg:'#191922',surface:'#2a2937',surface2:'#20202b',line:'#4b4958'}
 };
-const SUGGESTED={classic:'dex',bubbles:'ice',aurora:'violet',tide:'ice',stars:'ice',neon:'dex',ink:'sunset'};
-const DEFAULT_APPEARANCE={wallpaper:'classic',palette:'dex',lastPreset:'dex',customAccent:'#54d7b0',autoMatch:false,motion:true};
+const SUGGESTED={classic:'dex',bubbles:'ice',aurora:'violet',tide:'ice',stars:'ice',neon:'dex',ink:'sunset',fireflies:'gold',rain:'ice'};
+const DEFAULT_APPEARANCE={wallpaper:'classic',palette:'dex',lastPreset:'dex',customAccent:'#54d7b0',autoMatch:false,motion:true,intensity:2,pace:'natural',focusMotion:true};
 function normalizeAppearance(v){
   const x=v&&typeof v==='object'?v:{};
-  return {wallpaper:WALLPAPERS.some(p=>p[0]===x.wallpaper)?x.wallpaper:'classic',palette:PALETTES[x.palette]||x.palette==='custom'?x.palette:'dex',lastPreset:PALETTES[x.lastPreset]?x.lastPreset:'dex',customAccent:/^#[0-9a-f]{6}$/i.test(x.customAccent||'')?x.customAccent:'#54d7b0',autoMatch:!!x.autoMatch,motion:x.motion!==false};
+  return {wallpaper:WALLPAPERS.some(p=>p[0]===x.wallpaper)?x.wallpaper:'classic',palette:PALETTES[x.palette]||x.palette==='custom'?x.palette:'dex',lastPreset:PALETTES[x.lastPreset]?x.lastPreset:'dex',customAccent:/^#[0-9a-f]{6}$/i.test(x.customAccent||'')?x.customAccent:'#54d7b0',autoMatch:!!x.autoMatch,motion:x.motion!==false,intensity:[1,2,3].includes(Number(x.intensity))?Number(x.intensity):2,pace:['calm','natural','lively'].includes(x.pace)?x.pace:'natural',focusMotion:x.focusMotion!==false};
 }
 function rgb(hex){return [1,3,5].map(i=>parseInt(hex.slice(i,i+2),16))}
 function hex(rgbv){return '#'+rgbv.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('')}
@@ -184,7 +184,7 @@ function applyAppearance(){
   const soft=a.palette==='custom'?mix(accent,'#ffffff',.30):base.soft;
   const root=document.documentElement;
   for(const [k,v]of Object.entries({'--bg':base.bg,'--surface':base.surface,'--surface-2':base.surface2,'--line':base.line,'--mint':accent,'--mint-soft':soft,'--soft-highlight':accent+'24','--on-accent':readableText(accent),'--hero-bg':`linear-gradient(125deg,${mix(base.surface,accent,.20)} 0%,${base.surface} 78%)`}))root.style.setProperty(k,v);
-  document.body.dataset.wallpaper=a.wallpaper;document.body.dataset.motion=a.motion?'on':'off';
+  document.body.dataset.wallpaper=a.wallpaper;document.body.dataset.motion=a.motion?'on':'off';document.body.dataset.intensity=String(a.intensity||2);document.body.dataset.pace=a.pace||'natural';document.body.dataset.focusMotion=a.focusMotion===false?'off':'on';
   const meta=document.querySelector('meta[name=theme-color]');if(meta)meta.setAttribute('content',base.bg);
 }
 function saveAppearance(){applyAppearance();persist();renderAppearance()}
@@ -194,7 +194,7 @@ function renderAppearance(){
   $('paletteOptions').innerHTML=Object.entries(PALETTES).map(([key,p])=>`<button type="button" class="palette-choice ${a.palette===key?'active':''}" data-palette-choice="${key}" aria-pressed="${a.palette===key}"><span class="palette-swatch" style="background:linear-gradient(135deg,${p.accent} 0 52%,${p.surface} 52%)"></span>${p.name}</button>`).join('');
   const suggested=SUGGESTED[a.wallpaper],pal=PALETTES[suggested];
   $('paletteSuggestion').innerHTML=`<b>✦ Recommended match: ${pal.name}</b><p class="tiny">${a.wallpaper==='classic'?'The original Dex colors are balanced for the default background.':'A matching accent keeps the wallpaper and controls looking consistent.'}</p><div class="actions"><button type="button" class="secondary" id="useSuggestedPalette">Use ${pal.name}</button></div>`;
-  $('autoMatch').checked=a.autoMatch;$('enableMotion').checked=a.motion;
+  $('autoMatch').checked=a.autoMatch;$('enableMotion').checked=a.motion;$('motionIntensity').value=String(a.intensity);$('motionPace').value=a.pace;$('focusMotion').checked=a.focusMotion;
   $('customAccent').value=a.customAccent;$('colorCode').textContent=a.customAccent.toUpperCase();
   document.querySelectorAll('[data-wallpaper-choice]').forEach(el=>el.onclick=()=>{a.wallpaper=el.dataset.wallpaperChoice;if(a.autoMatch){a.palette=SUGGESTED[a.wallpaper];a.lastPreset=a.palette}saveAppearance()});
   document.querySelectorAll('[data-palette-choice]').forEach(el=>el.onclick=()=>{a.palette=el.dataset.paletteChoice;a.lastPreset=a.palette;saveAppearance()});
@@ -204,6 +204,12 @@ $('customAccent').addEventListener('input',()=>{$('colorCode').textContent=$('cu
 $('useCustomColor').onclick=()=>{const a=state.appearance;a.customAccent=$('customAccent').value;a.palette='custom';saveAppearance();toast('Custom accent applied.')};
 $('autoMatch').onchange=e=>{state.appearance.autoMatch=e.target.checked;saveAppearance()};
 $('enableMotion').onchange=e=>{state.appearance.motion=e.target.checked;saveAppearance()};
+$('motionIntensity').onchange=e=>{state.appearance.intensity=Number(e.target.value);saveAppearance()};
+$('motionPace').onchange=e=>{state.appearance.pace=e.target.value;saveAppearance()};
+$('focusMotion').onchange=e=>{state.appearance.focusMotion=e.target.checked;saveAppearance()};
+$('previewWallpaper').onclick=()=>{document.body.classList.add('previewing');$('wallpaperPreview').showModal()};
+$('closeWallpaperPreview').onclick=()=>$('wallpaperPreview').close();
+$('wallpaperPreview').addEventListener('close',()=>document.body.classList.remove('previewing'));
 $('resetAppearance').onclick=()=>{state.appearance={...DEFAULT_APPEARANCE};saveAppearance();toast('Original Dex colors restored.')};
 function showMoreSection(which){document.querySelectorAll('#more .subpanel').forEach(x=>x.classList.add('hidden'));$('more-'+which).classList.remove('hidden');document.querySelectorAll('[data-more]').forEach(x=>{const active=x.dataset.more===which;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active))});}
 document.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>showMoreSection(b.dataset.more));
@@ -217,7 +223,7 @@ const tourSteps=[
   {tag:'STEP 1 OF 4',title:'Start with the money you really have.',body:'Open Plan to choose how you get paid and enter your actual cash. Open Bills to enter your upcoming payments and repeat schedules. Expected pay is not money you already have.',preview:'<div class="row"><span>Income mode</span><b>Variable or regular</b></div><div class="row"><span>Starting balance</span><b>Money on hand</b></div><div class="row"><span>Bills</span><b>Amount + due date</b></div>'},
   {tag:'STEP 2 OF 4',title:'Record income and purchases.',body:'On Add, record earnings after they arrive and expenses after you pay them. Dex updates the dashboard based on what you enter.',preview:'<div class="row"><span>Income received</span><b>+$200.00</b></div><div class="row"><span>Groceries paid</span><b>−$24.00</b></div><small>Illustration only — these are not real entries.</small>'},
   {tag:'STEP 3 OF 4',title:'See the reality. Choose the response.',body:'On Home, Dex explains gaps and suggests adjustments. You can approve or review later. No bank money moves, and no plan is changed without approval.',preview:'<strong>Example:</strong><p>Rent still needs $60. Reducing optional spending could help; Dex will also show any shortfall that remains.</p><small>“Safe to spend” is only an estimate. Always check actual balances and due dates.</small>'},
-  {tag:'STEP 4 OF 4',title:'Make it feel like yours.',body:'Open More → Appearance to choose real floating bubbles, drifting lights, graffiti artwork, and matching colors. Dex suggests matching colors but never changes your choice unless you ask.',preview:'<strong>Your look, your choice</strong><p>Try wallpapers and colors. You can always reset to the original navy and mint theme.</p>'}
+  {tag:'STEP 4 OF 4',title:'Make it feel like yours.',body:'Open More → Appearance to try live bubbles, fireflies, rain, and color palettes. Dex suggests matching colors but never changes your choice unless you ask.',preview:'<strong>Your look, your choice</strong><p>Try wallpapers and colors. You can always reset to the original navy and mint theme.</p>'}
 ];
 let tourIndex=0;
 const tourModal=$('tourModal');
