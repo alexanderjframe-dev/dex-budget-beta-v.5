@@ -1,4 +1,4 @@
-# Dex Budget — Guided Beta v1.3
+# Dex Budget — Guided Beta v1.4
 
 A private, offline-capable mobile web app with guided budget recommendations, a dedicated Bills tab, and optional appearance customization. Deployable to GitHub Pages at no cost.
 
@@ -10,11 +10,11 @@ A private, offline-capable mobile web app with guided budget recommendations, a 
 4. Upload the **11 files inside** the extracted folder (including both `wallpaper-*.png` images); don't upload just the ZIP or the folder itself.
 5. Commit the changes to the branch used by GitHub Pages (usually `main`).
 6. Confirm **Settings → Pages** is set to **Deploy from a branch → main → / (root)**.
-7. Reopen your existing Pages link. If it still looks old, fully close and reopen the app or refresh Safari. The version label should show **GUIDED BETA v1.3**.
+7. Reopen your existing Pages link. If it still looks old, fully close and reopen the app or refresh Safari. The version label should show **GUIDED BETA v1.4**.
 
 If you set up a different GitHub repository or domain, browser storage **does not migrate automatically**. Export a JSON backup from the old site, import it at **History → Data & backup** on the new site.
 
-## New in v1.3
+## New in v1.4
 
 - **Bills is its own tab**: Upcoming, Paid history, Add / Edit.
 - Funding bars show how much is protected for each bill and how much is still unfunded.
@@ -41,7 +41,7 @@ If you set up a different GitHub repository or domain, browser storage **does no
 
 - `index.html` — responsive interface
 - `app.js` — calculations, recurring bills, data, appearance, guided recommendations
-- `sw.js` — offline caching with v1.3 cache bump
+- `sw.js` — offline caching with v1.4 cache bump
 - `manifest.webmanifest` — iPhone app manifest
 - `icon.svg`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` — icons
 - `wallpaper-neon-tag.png`, `wallpaper-ink-tag.png` — original PNG graffiti backgrounds
@@ -54,3 +54,7 @@ If you set up a different GitHub repository or domain, browser storage **does no
 3. Open More → Appearance, try Aurora, then select the Ice Blue scheme; switch to the graffiti wallpaper and apply the recommended palette.
 4. Refresh and verify the selections persist.
 5. Export backup and verify it is a JSON file before making bigger changes.
+
+## Live wallpapers (v1.4)
+
+More → Appearance → Bubbles, Ocean, Aurora, Starlight, or Graffiti for individually moving effects. Motion can be disabled, respects iOS Reduce Motion, and pauses when the tab is not visible. `motion.js` draws decorative canvas effects only and never reads financial data.

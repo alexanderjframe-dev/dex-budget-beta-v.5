@@ -160,7 +160,7 @@ $('newBillShortcut').onclick=()=>{clearBillForm();showBillsSection('edit')};
 $('cancelBillEdit').onclick=()=>{clearBillForm();showBillsSection('upcoming')};
 
 /* Appearance — deliberately separate from any financial calculation. */
-const WALLPAPERS=[['classic','Original','wp-classic'],['aurora','Aurora · motion','wp-aurora'],['tide','Ocean · motion','wp-tide'],['stars','Starlight · motion','wp-stars'],['neon','Graffiti · Neon','wp-neon'],['ink','Graffiti · Ink','wp-ink']];
+const WALLPAPERS=[['classic','Original','wp-classic'],['bubbles','Bubbles · live','wp-bubbles'],['aurora','Aurora · motion','wp-aurora'],['tide','Ocean · motion','wp-tide'],['stars','Starlight · motion','wp-stars'],['neon','Graffiti · Neon','wp-neon'],['ink','Graffiti · Ink','wp-ink']];
 const PALETTES={
   dex:{name:'Dex mint',accent:'#54d7b0',soft:'#7edbc0',bg:'#0b1220',surface:'#152136',surface2:'#0d1a2d',line:'#28384f'},
   ice:{name:'Ice blue',accent:'#6cbfff',soft:'#a2d6ff',bg:'#081427',surface:'#13253c',surface2:'#0d1b30',line:'#29465f'},
@@ -168,7 +168,7 @@ const PALETTES={
   sunset:{name:'Coral',accent:'#ffa88a',soft:'#ffceba',bg:'#1b1422',surface:'#30213a',surface2:'#231a2e',line:'#584051'},
   gold:{name:'Gold',accent:'#ffce75',soft:'#ffe5aa',bg:'#191922',surface:'#2a2937',surface2:'#20202b',line:'#4b4958'}
 };
-const SUGGESTED={classic:'dex',aurora:'violet',tide:'ice',stars:'ice',neon:'dex',ink:'sunset'};
+const SUGGESTED={classic:'dex',bubbles:'ice',aurora:'violet',tide:'ice',stars:'ice',neon:'dex',ink:'sunset'};
 const DEFAULT_APPEARANCE={wallpaper:'classic',palette:'dex',lastPreset:'dex',customAccent:'#54d7b0',autoMatch:false,motion:true};
 function normalizeAppearance(v){
   const x=v&&typeof v==='object'?v:{};
@@ -217,7 +217,7 @@ const tourSteps=[
   {tag:'STEP 1 OF 4',title:'Start with the money you really have.',body:'Open Plan to choose how you get paid and enter your actual cash. Open Bills to enter your upcoming payments and repeat schedules. Expected pay is not money you already have.',preview:'<div class="row"><span>Income mode</span><b>Variable or regular</b></div><div class="row"><span>Starting balance</span><b>Money on hand</b></div><div class="row"><span>Bills</span><b>Amount + due date</b></div>'},
   {tag:'STEP 2 OF 4',title:'Record income and purchases.',body:'On Add, record earnings after they arrive and expenses after you pay them. Dex updates the dashboard based on what you enter.',preview:'<div class="row"><span>Income received</span><b>+$200.00</b></div><div class="row"><span>Groceries paid</span><b>−$24.00</b></div><small>Illustration only — these are not real entries.</small>'},
   {tag:'STEP 3 OF 4',title:'See the reality. Choose the response.',body:'On Home, Dex explains gaps and suggests adjustments. You can approve or review later. No bank money moves, and no plan is changed without approval.',preview:'<strong>Example:</strong><p>Rent still needs $60. Reducing optional spending could help; Dex will also show any shortfall that remains.</p><small>“Safe to spend” is only an estimate. Always check actual balances and due dates.</small>'},
-  {tag:'STEP 4 OF 4',title:'Make it feel like yours.',body:'Open More → Appearance to choose a subtle moving background, graffiti artwork, and a color palette. Dex suggests matching colors but never changes your choice unless you ask.',preview:'<strong>Your look, your choice</strong><p>Try wallpapers and colors. You can always reset to the original navy and mint theme.</p>'}
+  {tag:'STEP 4 OF 4',title:'Make it feel like yours.',body:'Open More → Appearance to choose real floating bubbles, drifting lights, graffiti artwork, and matching colors. Dex suggests matching colors but never changes your choice unless you ask.',preview:'<strong>Your look, your choice</strong><p>Try wallpapers and colors. You can always reset to the original navy and mint theme.</p>'}
 ];
 let tourIndex=0;
 const tourModal=$('tourModal');

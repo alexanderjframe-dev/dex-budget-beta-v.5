@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <title>Dex Budget — Guided Beta v1.3</title>
+  <title>Dex Budget — Guided Beta v1.4</title>
   <style>
     :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#edf3ff;background:#0b1220;color-scheme:dark;
       --bg:#0b1220;--surface:#152136;--surface-2:#0d1a2d;--line:#28384f;--mint:#54d7b0;--mint-soft:#7edbc0;--text:#edf3ff;--muted:#a9b8d0;--dim:#8094b1;--amber:#eac58b;--rose:#ffadb1}
@@ -72,6 +72,14 @@
     @media(max-width:380px){main{padding-left:13px;padding-right:13px}.card{padding:16px}.grid{gap:9px}.stat .amount{font-size:17px}.switch-btn{font-size:11px;padding:10px 8px}.nav-btn{font-size:10px}.modal{padding:20px 16px}}
     @media(max-width:325px){.grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.nav-icon{width:18px;height:18px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+    /* v1.4 — live decorative motion, behind all budget controls */
+    #dexMotion{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:.92;transition:opacity .4s ease}
+    main{position:relative;z-index:1}
+    body[data-motion=off] #dexMotion,body[data-wallpaper=classic] #dexMotion{opacity:0}
+    body[data-wallpaper=bubbles] .wallpaper-layer{opacity:.82;background:radial-gradient(ellipse at 21% 26%,#147cb66b,transparent 54%),radial-gradient(ellipse at 78% 87%,#00b8ad43,transparent 62%),linear-gradient(155deg,#071629,#092943,#061528)}
+    .wp-bubbles{background:radial-gradient(circle at 23% 55%,transparent 9px,#a0f4ff9a 10px,transparent 12px),radial-gradient(circle at 67% 27%,transparent 14px,#d7ffff9a 15px,transparent 17px),radial-gradient(circle at 70% 80%,transparent 7px,#bbf4ffbb 8px,transparent 10px),linear-gradient(145deg,#092a48,#0e6281)}
+    @media(prefers-reduced-motion:reduce){#dexMotion{display:none!important}}
 
     /* v1.3 — polished tabs and customizable atmosphere */
     :root{--on-accent:#082320;--soft-highlight:#54d7b022;--hero-bg:linear-gradient(135deg,#173a3b 0%,#17283c 58%,#17233c 100%)}
@@ -150,6 +158,7 @@
 </head>
 <body data-wallpaper="classic" data-motion="on">
 <div class="wallpaper-layer" aria-hidden="true"></div>
+<canvas id="dexMotion" aria-hidden="true"></canvas>
 <svg xmlns="http://www.w3.org/2000/svg" class="sr-only" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></symbol>
@@ -161,7 +170,7 @@
 </svg>
 <main>
   <header class="topbar">
-    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div class="brand-name">DEX BUDGET<small>GUIDED BETA v1.3</small></div></div>
+    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div class="brand-name">DEX BUDGET<small>GUIDED BETA v1.4</small></div></div>
     <button type="button" class="topbtn" id="openTour">↗ &nbsp;App tour</button>
   </header>
 
@@ -285,7 +294,7 @@
       <div class="card"><span class="eyebrow">LIVE PREVIEW</span><h2 style="margin-top:8px">Your Dex, your style.</h2>
         <div class="style-preview"><span class="kicker">Estimated safe to spend</span><div class="preview-big">$142.50</div><div class="tiny">Sample only · Your actual budget is unchanged</div></div>
       </div>
-      <div class="card"><h2>Choose a background</h2><p class="tiny">Slow-moving abstract styles and two original graffiti wallpapers. All graphics stay behind your information.</p>
+      <div class="card"><h2>Choose a background</h2><p class="tiny">Living backgrounds with individual drifting bubbles, glows, and particles, plus two graffiti wallpapers. All graphics stay behind your information.</p>
         <div id="wallpaperOptions" class="wallpaper-grid" role="group" aria-label="Background presets"></div>
       </div>
       <div class="card"><h2>Color schemes</h2><p class="tiny">Try a preset or choose your own accent. Your financial data stays exactly the same.</p>
@@ -294,10 +303,10 @@
         <div class="suggestion" id="paletteSuggestion" aria-live="polite"></div>
         <label class="check-row"><input type="checkbox" id="autoMatch"> Automatically apply the suggested palette when changing backgrounds</label>
       </div>
-      <div class="card"><h2>Motion & accessibility</h2><label class="check-row"><input type="checkbox" id="enableMotion" checked> Allow subtle background animation</label><p class="tiny">Dex always respects your device's Reduce Motion preference, even if animation is enabled here.</p>
+      <div class="card"><h2>Motion & accessibility</h2><label class="check-row"><input type="checkbox" id="enableMotion" checked> Enable floating bubbles and live background effects</label><p class="tiny">Dex always respects your device's Reduce Motion preference, even if animation is enabled here.</p>
         <button id="resetAppearance" type="button" class="secondary" style="width:100%">Reset to original Dex look</button>
       </div>
-      <div class="hint">Appearance choices are stored on this device and included in a Dex backup. Animated backgrounds are CSS effects—not downloaded videos.</div>
+      <div class="hint">Appearance choices are stored on this device and included in a Dex backup. Live backgrounds are generated on your device—not downloaded videos. They pause when Dex is in the background.</div>
     </div>
   <div id="more-help" class="subpanel hidden" aria-label="Help and walkthrough">
     <div class="section-heading"><span class="eyebrow">HELP WHEN YOU NEED IT</span><h1>Let's make it clear.</h1><p>No financial jargon required.</p></div>
@@ -333,5 +342,6 @@
 </dialog>
 <dialog id="infoModal" class="modal" aria-labelledby="infoTitle"><small class="eyebrow">QUICK EXPLANATION</small><h2 id="infoTitle"></h2><p id="helpBody"></p><button id="closeInfo" type="button">Got it</button></dialog>
 <script src="app.js"></script>
+<script src="motion.js"></script>
 </body>
 </html>
