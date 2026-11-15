@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Dex Budget helps you adjust your budget when life changes. Clear numbers, practical choices, no judgment.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dex Budget">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Dex Budget — Guided Beta v1.3</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#edf3ff;background:#0b1220;color-scheme:dark;
+      --bg:#0b1220;--surface:#152136;--surface-2:#0d1a2d;--line:#28384f;--mint:#54d7b0;--mint-soft:#7edbc0;--text:#edf3ff;--muted:#a9b8d0;--dim:#8094b1;--amber:#eac58b;--rose:#ffadb1}
+    *{box-sizing:border-box}html{min-height:100%;scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -320px,#162c42 0,transparent 60%),var(--bg)}
+    button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.46;cursor:not-allowed}
+    main{max-width:660px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top,0px)) 17px calc(116px + env(safe-area-inset-bottom,0px))}
+    .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+    h1{font-size:clamp(25px,6.5vw,32px);line-height:1.16;letter-spacing:-.9px;margin:9px 0 7px;font-weight:780}
+    h2{font-size:18px;line-height:1.3;letter-spacing:-.2px;margin:0 0 10px;font-weight:750}h3{font-size:15px;margin:0 0 8px}
+    p{margin:8px 0 12px;line-height:1.5;color:var(--muted)}small,.tiny{font-size:12px;line-height:1.55;color:var(--muted)}strong,b{color:var(--text)}
+    .eyebrow{color:var(--mint-soft);font-weight:800;letter-spacing:.14em;font-size:10px}
+    .brand{display:flex;gap:10px;align-items:center}.brand-mark{display:grid;place-items:center;width:35px;height:35px;border:1px solid #376f68;background:linear-gradient(145deg,#183842,#162538);border-radius:11px;color:var(--mint);font-size:21px;letter-spacing:-2px;font-weight:900;box-shadow:inset 0 1px 0 #ffffff16}
+    .brand-name{font-weight:830;font-size:15px;letter-spacing:.045em;line-height:1.1}.brand-name small{display:block;font-weight:600;font-size:10px;letter-spacing:.12em;margin-top:2px;color:var(--dim)}
+    .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:23px}.topbtn{background:#1b2c40;border:1px solid #34465c;color:#d9e8f5;border-radius:12px;padding:8px 12px;min-height:38px;display:inline-flex;align-items:center;gap:6px;font-weight:670;font-size:12px}
+    .section-heading{margin:5px 1px 15px}.section-heading p{margin:3px 0 0;font-size:13px}.section-title{font-size:24px;letter-spacing:-.65px;margin:0 0 5px}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:21px;padding:19px;margin:0 0 14px;box-shadow:0 5px 24px #00000019}
+    .hero-card{background:linear-gradient(135deg,#173a3b 0%,#17283c 58%,#17233c 100%);border-color:#31545c;box-shadow:0 10px 40px #00000024, inset 0 1px 0 #ffffff0d}
+    .hero-number{font-size:clamp(36px,10vw,49px);font-weight:820;letter-spacing:-2px;line-height:1.15;margin:7px 0;color:var(--mint-soft);font-variant-numeric:tabular-nums}
+    .kicker{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#a4bacd;font-weight:770}.subtle{font-size:12px;color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;background:#193a3b;color:#8defcf;border:1px solid #2e6e63;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:750}
+    .start{background:#182e3d;border-color:#37605e}.steps{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.stepchip{border-radius:999px;border:1px solid #37546a;padding:6px 9px;font-size:11px;color:#cae1e8;background:#172636}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.actions button{flex:1 1 auto}
+    button:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice){background:var(--mint);color:#082320;font-size:14px;font-weight:780;border:1px solid transparent;min-height:46px;border-radius:13px;padding:11px 15px;transition:transform .16s ease,box-shadow .19s ease,background .19s ease,border-color .19s ease}
+    button.secondary:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice){background:#263750;color:#e4ecfa;border-color:#334a66}
+    button.danger:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice){background:#4c2634;color:#ffdbe3}
+    button:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice):active{transform:scale(.976)}
+    button:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice):hover{box-shadow:0 4px 17px #0002}
+    label{display:block;font-size:12px;font-weight:650;color:#b5c4d8;margin:16px 0 7px}
+    input,select{width:100%;border-radius:12px;background:#0d1728;color:#fff;border:1px solid #40516a;padding:12px 13px;font-size:16px;min-height:48px;outline:none;transition:border-color .18s ease,box-shadow .18s ease}
+    input:focus,select:focus{border-color:var(--mint);box-shadow:0 0 0 3px #54d7b01e}
+    button:focus-visible,summary:focus-visible,[role=tab]:focus-visible{outline:3px solid #8ef9d9;outline-offset:3px}
+    input::placeholder{color:#7286a2}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid label{margin-top:6px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #2b3a50;flex-wrap:wrap}.row:last-child{border:0}.row>div{max-width:100%}.row b{font-variant-numeric:tabular-nums}
+    .row small{display:block}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:13px 0}
+    .stat{background:#0d1a2d;border:1px solid #24354d;border-radius:15px;padding:13px;min-width:0}.stat .amount{font-size:19px;font-weight:800;letter-spacing:-.6px;margin-top:5px;font-variant-numeric:tabular-nums;color:#f1f7ff}.stat .amount.mint{color:var(--mint-soft)}
+    .helpbtn{background:#233b4b;border:1px solid #47657a;color:#c9e3e8;border-radius:50%;font-weight:800;font-size:12px;min-width:25px;min-height:25px;margin-left:4px;vertical-align:middle;transition:background .15s ease}
+    .helpbtn:active{background:#32535d}.warning,.critical,.good{border-left:3px solid var(--amber);padding:7px 10px;margin:10px 0;border-radius:0 10px 10px 0;background:#e5b3630c}
+    .critical{border-left-color:var(--rose);background:#ec77830b}.good{border-left-color:var(--mint);background:#54d7b008}
+    .hint{border:1px solid #2d455a;background:#0f1d30;border-radius:12px;padding:12px;color:#b9cddd;font-size:12px;line-height:1.55;margin:12px 0}
+    .inline-link{display:inline-flex;gap:6px;align-items:center;background:transparent;border:0;color:var(--mint-soft);font-size:13px;font-weight:750;padding:8px 0;min-height:32px}
+    .hidden{display:none!important}.app-panel,.subpanel:not(.hidden){animation:panelEnter .24s cubic-bezier(.2,.7,.2,1) both}
+    .segmented{display:flex;gap:5px;background:#0d1a2d;border:1px solid #26374d;border-radius:15px;padding:5px;overflow-x:auto;scrollbar-width:none;margin:13px 0 16px}.segmented::-webkit-scrollbar{display:none}
+    .switch-btn{background:transparent;border:0;color:#9eb0c9;font-size:12px;font-weight:740;border-radius:11px;padding:11px 12px;flex:1 0 auto;min-height:41px;white-space:nowrap;transition:background .2s ease,color .2s ease,transform .2s ease}
+    .switch-btn.active{background:#27435a;color:#eafff8;box-shadow:inset 0 1px 0 #ffffff14,0 2px 8px #0002}.switch-btn:active{transform:scale(.97)}
+    details{border-top:1px solid #293950}details:last-child{border-bottom:0}summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;font-size:13px;font-weight:700;padding:15px 0;color:#dce9f6}summary::-webkit-details-marker{display:none}summary:after{content:'⌄';font-size:18px;color:var(--mint-soft);transition:transform .2s ease}details[open]>summary:after{transform:rotate(180deg)}details p{margin:0 0 16px;font-size:13px}
+    .activity-list{min-height:52px} .activity-list .row b{font-size:13px} .activity-list .row button{min-height:36px!important;padding:6px 11px!important;font-size:12px!important}
+    .nav-shell{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:9px 12px calc(9px + env(safe-area-inset-bottom,0px));border-top:1px solid #28384f;background:linear-gradient(180deg,#0d1726f5,#0b1220fa);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+    .tabs{max-width:650px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.nav-btn{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;background:transparent;border:0;border-radius:13px;color:#879db7;padding:8px 3px 7px;min-height:56px;font-size:10px;line-height:1;font-weight:710;transition:color .2s ease,background .2s ease,transform .2s ease}
+    .nav-btn.active{background:#1d3946;color:var(--mint-soft)}.nav-btn:active{transform:scale(.94)}.nav-icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-btn.active .nav-icon{stroke-width:2.1}
+    .modal{width:min(94vw,470px);max-height:min(85dvh,760px);overflow:auto;background:#152136;color:var(--text);border:1px solid #436375;border-radius:23px;padding:23px 20px;box-shadow:0 30px 90px #000c}
+    .modal::backdrop{background:#050e1ace;backdrop-filter:blur(4px)}.modal h2{font-size:24px;line-height:1.2;letter-spacing:-.5px;margin:10px 0}.modal p{font-size:14px}
+    .modal .actions button{flex:1}.modal .illustration{background:#0d1a2d;border:1px solid #2e445d;border-radius:14px;padding:14px;margin:17px 0}
+    .dots{display:flex;justify-content:center;gap:6px;margin:17px 0 12px}.dot{width:7px;height:7px;background:#4d647d;border-radius:8px;transition:width .18s ease,background .18s ease}.dot.active{width:21px;background:var(--mint)}
+    .plainlink{display:block;margin:12px auto 0;color:var(--mint-soft);background:transparent;border:0;text-decoration:underline;padding:8px;font-size:12px}
+    #helpBody{white-space:pre-line}.feedback-toast{position:fixed;z-index:20;bottom:calc(88px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,16px);width:calc(100% - 38px);max-width:460px;background:#254c4b;border:1px solid #467974;color:#e8fff6;border-radius:13px;padding:11px 15px;font-size:13px;font-weight:670;text-align:center;opacity:0;visibility:hidden;pointer-events:none;box-shadow:0 10px 40px #0008;transition:opacity .2s ease,transform .2s ease,visibility .2s ease}
+    .feedback-toast.visible{opacity:1;visibility:visible;transform:translate(-50%,0)}
+    @keyframes panelEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:380px){main{padding-left:13px;padding-right:13px}.card{padding:16px}.grid{gap:9px}.stat .amount{font-size:17px}.switch-btn{font-size:11px;padding:10px 8px}.nav-btn{font-size:10px}.modal{padding:20px 16px}}
+    @media(max-width:325px){.grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.nav-icon{width:18px;height:18px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+    /* v1.3 — polished tabs and customizable atmosphere */
+    :root{--on-accent:#082320;--soft-highlight:#54d7b022;--hero-bg:linear-gradient(135deg,#173a3b 0%,#17283c 58%,#17233c 100%)}
+    body{isolation:isolate;background:var(--bg)}
+    .wallpaper-layer{pointer-events:none;position:fixed;inset:-7%;z-index:-1;opacity:.55;background:radial-gradient(ellipse at 50% -200px,#204263,transparent 62%);transition:opacity .5s ease,background .5s ease;will-change:transform}
+    body[data-wallpaper=aurora] .wallpaper-layer{opacity:.65;background:radial-gradient(ellipse 68% 50% at 15% 10%,#4ed2a37a,transparent 68%),radial-gradient(ellipse 52% 68% at 90% 55%,#7159f28a,transparent 75%),radial-gradient(ellipse 70% 48% at 30% 90%,#329cc47c,transparent 70%)}
+    body[data-wallpaper=tide] .wallpaper-layer{opacity:.65;background:repeating-radial-gradient(ellipse at 80% 5%,#3988b74c 0 13px,transparent 16px 66px),radial-gradient(ellipse at 40% 85%,#1bd6ae42,transparent 60%),linear-gradient(145deg,#07162d,#113a49,#0a1830)}
+    body[data-wallpaper=stars] .wallpaper-layer{opacity:.72;background:radial-gradient(1px 1px at 9% 12%,#b5eeff 99%,transparent),radial-gradient(2px 2px at 79% 7%,#d4dcff 99%,transparent),radial-gradient(1px 1px at 22% 68%,#b5eeff 99%,transparent),radial-gradient(2px 2px at 57% 43%,#d4dcff 99%,transparent),radial-gradient(1px 1px at 96% 82%,#b5eeff 99%,transparent),radial-gradient(2px 2px at 15% 91%,#d4dcff 99%,transparent),radial-gradient(ellipse at 80% 70%,#3b3a9066,transparent 60%);background-size:230px 280px,360px 310px,410px 370px,270px 330px,390px 430px,350px 390px,100% 100%}
+    body[data-wallpaper=neon] .wallpaper-layer{opacity:.56;background:linear-gradient(#05101ca1,#071120a6),url('./wallpaper-neon-tag.png') center 50% /cover no-repeat}
+    body[data-wallpaper=ink] .wallpaper-layer{opacity:.58;background:linear-gradient(#07101da8,#080d1aa8),url('./wallpaper-ink-tag.png') center 50% /cover no-repeat}
+    body[data-motion=on][data-wallpaper=aurora] .wallpaper-layer{animation:auroraMove 22s ease-in-out infinite alternate}
+    body[data-motion=on][data-wallpaper=tide] .wallpaper-layer{animation:tideMove 24s ease-in-out infinite alternate}
+    body[data-motion=on][data-wallpaper=stars] .wallpaper-layer{animation:starMove 28s linear infinite alternate}
+    @keyframes auroraMove{from{transform:translate3d(-3%,2%,0) scale(1.05) rotate(-3deg)}to{transform:translate3d(3%,-2%,0) scale(1.12) rotate(5deg)}}
+    @keyframes tideMove{from{transform:translate3d(-3%,0,0) scale(1.04)}to{transform:translate3d(3%,-2%,0) scale(1.12)}}
+    @keyframes starMove{from{transform:translate3d(0,0,0)}to{transform:translate3d(-2%,-3%,0)}}
+    .card{background:var(--surface);border-color:var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .hero-card{background:var(--hero-bg);border-color:var(--line)}
+    .hero-number,.eyebrow,.nav-btn.active,.inline-link{color:var(--mint-soft)}
+    .brand-mark{color:var(--mint);border-color:var(--line)}
+    button:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice):not(.inline-link){background:var(--mint);color:var(--on-accent)}
+    button.secondary:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice):not(.inline-link){background:var(--surface-2);color:var(--text);border:1px solid var(--line)}
+    button.danger:not(.nav-btn):not(.helpbtn):not(.plainlink):not(.switch-btn):not(.topbtn):not(.inline-link):not(.wallpaper-choice):not(.palette-choice):not(.inline-link){background:#4c2634;color:#ffdbe3}
+    .badge{background:var(--soft-highlight);color:var(--mint-soft);border-color:var(--line)}
+    .nav-shell{border-color:var(--line);background:color-mix(in srgb,var(--bg) 94%,transparent)}
+    .tabs{grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+    .nav-btn{padding-left:1px;padding-right:1px;font-size:10px;min-width:0}
+    .nav-btn.active{background:var(--soft-highlight)}
+    .stat,.segmented,.hint{background:var(--surface-2);border-color:var(--line)}
+    .switch-btn.active{background:var(--soft-highlight);color:var(--text)}
+    input,select{background:var(--surface-2);color:var(--text);border-color:var(--line)}
+    input:focus,select:focus{border-color:var(--mint);box-shadow:0 0 0 3px var(--soft-highlight)}
+    .feedback-toast{background:var(--surface);border-color:var(--mint);color:var(--text)}
+    .bill-tile{border:1px solid var(--line);background:var(--surface-2);border-radius:16px;padding:14px;margin:11px 0}
+    .bill-tile-head{display:flex;align-items:start;justify-content:space-between;gap:8px}
+    .bill-title{font-weight:790;font-size:15px}.bill-amount{font-weight:840;font-size:21px;white-space:nowrap}
+    .due-pill{display:inline-flex;align-items:center;gap:4px;border-radius:100px;padding:4px 9px;font-size:11px;margin:9px 0;font-weight:680;background:var(--soft-highlight);color:var(--mint-soft)}
+    .due-pill.urgent{background:#f6a77026;color:#ffd098}.due-pill.overdue{background:#fa7f9526;color:#ffb5be}
+    .fund-track{height:7px;border-radius:12px;background:#35455e;overflow:hidden;margin:8px 0 5px}.fund-fill{height:100%;border-radius:12px;background:linear-gradient(90deg,var(--mint),var(--mint-soft));transition:width .4s ease}
+    .bill-tile .actions{margin-top:11px}.bill-tile .actions button{font-size:12px!important;min-height:36px!important;padding:7px 10px!important}
+    .bills-overview{background:var(--hero-bg)}
+    .bills-stat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.bills-stat>div{border-radius:13px;padding:11px 7px;background:#0516245e;text-align:center}
+    .bills-stat b{display:block;font-size:clamp(13px,3.8vw,18px);font-variant-numeric:tabular-nums}.bills-stat small{display:block;font-size:10px}
+    .wallpaper-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+    button.inline-link{background:transparent!important;border:0!important;color:var(--mint-soft)!important;min-height:34px!important;padding:6px 0!important;font-size:12px!important} 
+    .wallpaper-choice{position:relative;border:2px solid transparent;border-radius:15px;padding:4px;background:var(--surface-2);color:var(--text);text-align:left;min-width:0;transition:transform .18s ease,border-color .18s ease}
+    .wallpaper-choice.active,.palette-choice.active{border-color:var(--mint);box-shadow:0 0 0 1px var(--mint),0 0 17px var(--soft-highlight)}
+    .wallpaper-choice:active,.palette-choice:active{transform:scale(.97)}
+    .wallpaper-image{display:block;aspect-ratio:4/3;border-radius:10px;background-size:cover;background-position:center}
+    .wallpaper-name{display:block;padding:7px 5px 4px;font-size:11px;font-weight:750}
+    .wp-classic{background:radial-gradient(ellipse at 35% 5%,#27445d,#0b1220 75%)}
+    .wp-aurora{background:radial-gradient(ellipse at 15% 0%,#3de1a6,#142b48 50%,transparent 85%),radial-gradient(at 85% 85%,#7b48ea,#0b1220 65%)}
+    .wp-tide{background:repeating-radial-gradient(ellipse at 85% 10%,#4b9fcb 0 3px,transparent 8px 25px),linear-gradient(#102e49,#051327)}
+    .wp-stars{background:radial-gradient(2px 2px at 15% 22%,#fff,transparent),radial-gradient(2px 2px at 68% 63%,#fff,transparent),radial-gradient(1px 1px at 35% 78%,#fff,transparent),linear-gradient(#172358,#091329)}
+    .wp-neon{background-image:url('./wallpaper-neon-tag.png')}.wp-ink{background-image:url('./wallpaper-ink-tag.png')}
+    .palette-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0}
+    .palette-choice{background:transparent;border:2px solid transparent;border-radius:13px;padding:3px 2px 8px;color:var(--text);font-size:10px;font-weight:680}
+    .palette-swatch{display:block;border-radius:11px;height:43px;border:1px solid #ffffff20;margin-bottom:7px;position:relative}
+    .palette-choice.active .palette-swatch:after,.wallpaper-choice.active .wallpaper-image:after{content:'✓';position:absolute;right:5px;top:5px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;color:#082320;background:var(--mint);font-size:11px;font-weight:900}
+    .wallpaper-image{position:relative}
+    .color-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    input[type=color]{width:54px;height:50px;padding:5px;flex:0 0 54px;cursor:pointer}
+    .color-row button{min-height:42px!important;font-size:12px!important;margin-left:auto}
+    .suggestion{margin:14px 0 10px;padding:14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+    .suggestion .actions{margin-top:9px}.suggestion button{min-height:38px!important;font-size:12px!important}
+    .check-row{display:flex;gap:11px;align-items:start;font-size:13px;line-height:1.45;color:var(--text);cursor:pointer;font-weight:550}
+    .check-row input[type=checkbox]{width:19px;min-width:19px;min-height:19px;height:19px;accent-color:var(--mint);margin:0}
+    .style-preview{margin-top:15px;padding:19px;border:1px solid var(--line);border-radius:18px;background:var(--hero-bg)}
+    .preview-big{font-size:38px;font-weight:820;letter-spacing:-1px;color:var(--mint-soft);margin:8px 0}
+    .app-panel,.subpanel:not(.hidden){animation:panelEnter .25s cubic-bezier(.18,.75,.2,1) both}
+    @media(max-width:359px){.wallpaper-grid{gap:6px}.palette-grid{gap:3px}.nav-icon{width:17px;height:17px}.nav-btn{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){.wallpaper-layer{animation:none!important;transition:none!important}.fund-fill{transition:none!important}}
+    body[data-motion=off] .wallpaper-layer{animation:none!important;will-change:auto}
+
+  </style>
+</head>
+<body data-wallpaper="classic" data-motion="on">
+<div class="wallpaper-layer" aria-hidden="true"></div>
+<svg xmlns="http://www.w3.org/2000/svg" class="sr-only" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 3v6h6M3 9a9 9 0 1 1 1 7M8 12h4v-4"/></symbol>
+  <symbol id="i-bills" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h4"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 9a3.3 3.3 0 0 1 6.5 1c0 2-3.5 2.6-3.5 5M12 18h.01"/></symbol>
+</svg>
+<main>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div class="brand-name">DEX BUDGET<small>GUIDED BETA v1.3</small></div></div>
+    <button type="button" class="topbtn" id="openTour">↗ &nbsp;App tour</button>
+  </header>
+
+  <section id="home" class="app-panel" aria-label="Home dashboard">
+    <div class="section-heading"><span class="eyebrow">YOUR FINANCIAL PICTURE</span><h1>Know where you stand.</h1><p>Clear numbers, practical options, no judgment.</p></div>
+    <div class="card start hidden" id="startBanner">
+      <span class="eyebrow">START HERE</span><h2 style="margin-top:7px">Make this budget yours.</h2>
+      <p>Start with your current money and upcoming bills. Dex will use that information to explain what may be available.</p>
+      <div class="steps"><span class="stepchip">1 · Set up</span><span class="stepchip">2 · Add bills</span><span class="stepchip">3 · Record money</span></div>
+      <div class="actions"><button id="startSetup">Set up my budget</button><button class="secondary" id="startTour">How it works</button></div>
+    </div>
+    <div class="card hero-card">
+      <div class="kicker">Estimated safe to spend <button class="helpbtn" type="button" data-help="safe" aria-label="Explain safe to spend">?</button></div>
+      <div class="hero-number" id="safe">—</div>
+      <div id="status" aria-live="polite"></div><small id="horizonText"></small>
+      <p class="tiny" style="margin-bottom:0">A planning estimate—not a live bank balance or a guarantee that every bill is covered.</p>
+      <div class="actions"><button id="homeAddIncome">+ Add income</button><button class="secondary" id="homeAddExpense">− Add expense</button></div>
+    </div>
+    <div class="card bill-home-card"><div class="row" style="padding:0 0 9px"><h2 style="margin:0">Next bills</h2><button type="button" class="inline-link" id="homeBillsLink">See all bills →</button></div><div id="homeBillPreview"></div></div>
+    <div class="card"><h2>Dex recommends <button class="helpbtn" type="button" data-help="recommend" aria-label="Explain recommendations">?</button></h2><div id="recommendation"></div></div>
+    <div class="card"><h2>Where your money stands <button class="helpbtn" type="button" data-help="funding" aria-label="Explain funding picture">?</button></h2>
+      <p class="tiny">What you have, what you've protected, and what's still needed.</p>
+      <details id="fundingDetails"><summary>View the full breakdown</summary><div id="breakdown"></div></details>
+    </div>
+  </section>
+
+  <section id="add" class="app-panel hidden" aria-label="Record a transaction">
+    <div class="section-heading"><span class="eyebrow">DAILY TRACKING</span><h1>Record money.</h1><p>Just what came in or went out. Dex handles the planning math.</p></div>
+    <div class="card">
+      <h2>Add a transaction <button class="helpbtn" type="button" data-help="record" aria-label="Explain recording transactions">?</button></h2>
+      <label for="type">What happened?</label>
+      <select id="type"><option value="income">I received money</option><option value="expense">I spent money</option></select>
+      <label for="amount">Amount ($)</label><input id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="200.00">
+      <label for="note">What was it for? (optional)</label><input id="note" maxlength="120" placeholder="DoorDash, paycheck, groceries…">
+      <div class="hint" id="entryTip">Only enter income after you receive it. Dex will estimate your tax reserve using the rate you chose.</div>
+      <button id="record" style="width:100%">Save transaction</button>
+    </div>
+    <div class="card"><h2>How this works</h2><p>Income increases your tracked cash. Purchases decrease it. Your dashboard and suggested adjustments update after you save.</p><p class="tiny">The app does not connect to your bank or move money. Check your real balance regularly.</p></div>
+  </section>
+
+  <section id="bills" class="app-panel hidden" aria-label="Bills and recurring payments">
+    <div class="section-heading"><span class="eyebrow">YOUR RECURRING PAYMENTS</span><h1>Bills, in one place.</h1><p>See what is due, what is protected, and what needs attention.</p></div>
+    <div class="card bills-overview"><div class="kicker">Upcoming obligations</div><div id="billsSummary"></div><p class="tiny" style="margin-bottom:0">"Protected" means money assigned in Dex. No money moves between bank accounts.</p></div>
+    <div class="segmented" role="tablist" aria-label="Bills sections">
+      <button type="button" class="switch-btn active" data-bills="upcoming" role="tab" aria-selected="true">Upcoming</button>
+      <button type="button" class="switch-btn" data-bills="paid" role="tab" aria-selected="false">Paid history</button>
+      <button type="button" class="switch-btn" data-bills="edit" role="tab" aria-selected="false">+ Add bill</button>
+    </div>
+    <div id="bills-upcoming" class="subpanel">
+      <div class="card"><div class="row" style="padding:0 0 12px"><h2 style="margin:0">Bills & due dates</h2><button type="button" class="inline-link" id="newBillShortcut">Add new →</button></div>
+        <div id="billsList" class="bills-list"></div>
+      </div>
+      <div class="hint">If you've added a bill before this update, its repeat schedule is set to <strong>One time</strong> until you choose a frequency using Edit. This prevents Dex from assuming an obligation repeats.</div>
+    </div>
+    <div id="bills-paid" class="subpanel hidden"><div class="card"><h2>Recorded bill payments</h2><p class="tiny">Payments recorded with “Mark paid” are listed here. Manual expenses on Add aren't matched automatically.</p><div id="paidBillsList" class="activity-list"></div></div></div>
+    <div id="bills-edit" class="subpanel hidden"><div class="card">
+      <h2 id="billFormTitle">Add a bill <button class="helpbtn" type="button" data-help="bills" aria-label="Explain bills">?</button></h2>
+      <p class="tiny" id="billFormSubtitle">Set up one bill, then Dex will show it in Upcoming.</p>
+      <label for="billName">Bill name</label><input id="billName" placeholder="Rent, internet, insurance..." maxlength="80">
+      <div class="grid"><div><label for="billAmount">Amount due ($)</label><input id="billAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="800.00"></div><div><label for="billDate">Next due date</label><input id="billDate" type="date"></div></div>
+      <label for="billRepeat">How often does it repeat?</label><select id="billRepeat"><option value="monthly">Every month</option><option value="weekly">Every week</option><option value="biweekly">Every two weeks</option><option value="yearly">Every year</option><option value="none">One time only</option></select>
+      <label for="billFunded">Money already set aside ($)</label><input id="billFunded" type="number" min="0" step="0.01" inputmode="decimal" value="0">
+      <p class="tiny">Setting aside money here is only a category allocation. It does not transfer money from your bank.</p>
+      <button id="addBill" style="width:100%;margin-top:10px">Save bill</button>
+      <button type="button" id="cancelBillEdit" class="secondary hidden" style="width:100%;margin-top:8px">Cancel editing</button>
+    </div></div>
+  </section>
+
+  <section id="plan" class="app-panel hidden" aria-label="Budget setup">
+    <div class="section-heading"><span class="eyebrow">PERSONALIZE DEX</span><h1>My plan.</h1><p>Set up your income and everyday essentials. Bills have their own tab.</p></div>
+    <div class="segmented" role="tablist" aria-label="Budget plan sections">
+      <button type="button" class="switch-btn active" data-plan="basics" role="tab" aria-selected="true">1 · Pay & cash</button>
+      <button type="button" class="switch-btn" data-plan="essentials" role="tab" aria-selected="false">2 · Everyday</button>
+    </div>
+    <div id="plan-basics" class="subpanel">
+      <div class="card">
+        <h2>Pay & cash</h2><p class="tiny">Choose how you get paid and start with money you actually have today.</p>
+        <label for="mode">Pay schedule <button class="helpbtn" type="button" data-help="incomeMode" aria-label="Explain income modes">?</button></label>
+        <select id="mode"><option value="variable">Variable / gig income</option><option value="weekly">Weekly paycheck</option><option value="biweekly">Every two weeks</option><option value="semimonthly">Twice monthly</option><option value="monthly">Monthly paycheck</option></select>
+        <label for="cash">Starting cash across tracked accounts ($) <button class="helpbtn" type="button" data-help="cash" aria-label="Explain starting cash">?</button></label>
+        <input id="cash" type="number" min="0" step="0.01" inputmode="decimal">
+        <p class="tiny">Enter your one-time starting balance. For later corrections, use History → Data & backup → Reconcile cash.</p>
+        <label for="nextPay">Expected next income date (optional)</label><input id="nextPay" type="date">
+        <label for="tax">Estimated tax reserve (%) <button class="helpbtn" type="button" data-help="tax" aria-label="Explain tax reserve">?</button></label><input id="tax" type="number" min="0" max="70" step="0.5" inputmode="decimal">
+        <div class="grid"><div><label for="fun">Target fun / day ($)</label><input id="fun" type="number" min="0" step="0.01" inputmode="decimal"></div><div><label for="saveGoal">Target savings / day ($)</label><input id="saveGoal" type="number" min="0" step="0.01" inputmode="decimal"></div></div>
+        <div class="hint">Targets express your preferences. This beta only protects optional savings and spending after you approve an allocation on Home.</div>
+        <button id="saveSettings" style="width:100%">Save my basics</button>
+      </div>
+      <button type="button" id="goBillsFromPlan" class="secondary" style="width:100%">Next: add your bills →</button>
+    </div>
+    <div id="plan-essentials" class="subpanel hidden">
+      <div class="card">
+        <h2>Everyday necessities</h2><p>What do things like groceries, fuel, and transportation typically cost each day?</p>
+        <label for="essential">Essential daily reserve ($)</label><input id="essential" type="number" min="0" step="0.01" inputmode="decimal">
+        <div class="hint">This is an estimated planning amount—not an expense you've already paid. You can change it as your circumstances change.</div>
+        <button id="saveEssential" style="width:100%">Save everyday costs</button>
+      </div>
+      <div class="actions"><button id="goHomeFromPlan" type="button" class="secondary">View dashboard →</button><button type="button" id="goBillsFromEssentials">Manage bills →</button></div>
+    </div>
+  </section>
+
+  <section id="activity" class="app-panel hidden" aria-label="History and data">
+    <div class="section-heading"><span class="eyebrow">YOUR RECORDS</span><h1>History.</h1><p>See what changed, when, and why.</p></div>
+    <div class="segmented" role="tablist" aria-label="History sections">
+      <button type="button" class="switch-btn active" data-history="transactions" role="tab" aria-selected="true">Transactions</button>
+      <button type="button" class="switch-btn" data-history="adjustments" role="tab" aria-selected="false">Adjustments</button>
+      <button type="button" class="switch-btn" data-history="data" role="tab" aria-selected="false">Data & backup</button>
+    </div>
+    <div id="history-transactions" class="subpanel"><div class="card"><h2>Recorded transactions</h2><p class="tiny">Your saved payments and purchases appear here.</p><div id="transactions" class="activity-list"></div></div></div>
+    <div id="history-adjustments" class="subpanel hidden"><div class="card"><h2>Approved changes</h2><p class="tiny">Dex never transfers money between bank accounts. Approvals change only the allocations in the app.</p><div id="audit" class="activity-list"></div></div></div>
+    <div id="history-data" class="subpanel hidden"><div class="card"><h2>Data & backup</h2><p class="tiny">Your data is stored on this device. Export a backup regularly, especially before updating the app or changing phones.</p><div class="actions"><button id="export">Export backup</button><button class="secondary" id="reconcile">Reconcile cash</button></div><label for="import">Restore a saved JSON backup</label><input id="import" type="file" accept="application/json,.json"><p class="tiny">Clearing website data can erase entries. There is no bank sync or cloud backup.</p></div></div>
+  </section>
+
+  <section id="more" class="app-panel hidden" aria-label="Personalization and help">
+    <div class="section-heading"><span class="eyebrow">MAKE DEX YOURS</span><h1>More.</h1><p>Change the atmosphere, or get a quick explanation.</p></div>
+    <div class="segmented" role="tablist" aria-label="More sections">
+      <button type="button" class="switch-btn active" data-more="appearance" role="tab" aria-selected="true">✦ Appearance</button>
+      <button type="button" class="switch-btn" data-more="help" role="tab" aria-selected="false">? Help & tour</button>
+    </div>
+    <div id="more-appearance" class="subpanel">
+      <div class="card"><span class="eyebrow">LIVE PREVIEW</span><h2 style="margin-top:8px">Your Dex, your style.</h2>
+        <div class="style-preview"><span class="kicker">Estimated safe to spend</span><div class="preview-big">$142.50</div><div class="tiny">Sample only · Your actual budget is unchanged</div></div>
+      </div>
+      <div class="card"><h2>Choose a background</h2><p class="tiny">Slow-moving abstract styles and two original graffiti wallpapers. All graphics stay behind your information.</p>
+        <div id="wallpaperOptions" class="wallpaper-grid" role="group" aria-label="Background presets"></div>
+      </div>
+      <div class="card"><h2>Color schemes</h2><p class="tiny">Try a preset or choose your own accent. Your financial data stays exactly the same.</p>
+        <div id="paletteOptions" class="palette-grid" role="group" aria-label="Color theme presets"></div>
+        <label for="customAccent">Custom accent color</label><div class="color-row"><input id="customAccent" type="color" value="#54d7b0" aria-label="Choose custom accent color"><span id="colorCode" class="tiny">#54D7B0</span><button id="useCustomColor" type="button" class="secondary">Use this color</button></div>
+        <div class="suggestion" id="paletteSuggestion" aria-live="polite"></div>
+        <label class="check-row"><input type="checkbox" id="autoMatch"> Automatically apply the suggested palette when changing backgrounds</label>
+      </div>
+      <div class="card"><h2>Motion & accessibility</h2><label class="check-row"><input type="checkbox" id="enableMotion" checked> Allow subtle background animation</label><p class="tiny">Dex always respects your device's Reduce Motion preference, even if animation is enabled here.</p>
+        <button id="resetAppearance" type="button" class="secondary" style="width:100%">Reset to original Dex look</button>
+      </div>
+      <div class="hint">Appearance choices are stored on this device and included in a Dex backup. Animated backgrounds are CSS effects—not downloaded videos.</div>
+    </div>
+  <div id="more-help" class="subpanel hidden" aria-label="Help and walkthrough">
+    <div class="section-heading"><span class="eyebrow">HELP WHEN YOU NEED IT</span><h1>Let's make it clear.</h1><p>No financial jargon required.</p></div>
+    <div class="card start"><h2>Dex in one minute</h2><p>Enter money you have. Add your upcoming obligations. Record what comes in and goes out. Review changes when Dex suggests them.</p><button id="replayTour">Replay the walkthrough</button></div>
+    <div class="card"><h2>Learn the numbers</h2>
+      <details><summary>Safe to spend</summary><p>Money Dex estimates may be available after protected funds and near-term essentials. This is not a bank balance or a guarantee; check all upcoming bills and your accounts before spending.</p></details>
+      <details><summary>Tracked cash</summary><p>Your starting balance, plus recorded income, minus recorded expenses. Reconcile regularly against your actual accounts.</p></details>
+      <details><summary>Already protected</summary><p>Money assigned within Dex to bills, taxes, necessities, optional savings, or discretionary spending. Dex does not move real money.</p></details>
+      <details><summary>Unassigned cash</summary><p>Money not yet assigned to a category. Upcoming obligations may still need it, so it's not necessarily spendable.</p></details>
+      <details><summary>Upcoming bill gap</summary><p>Money needed for bills inside your current planning window that is not yet protected.</p></details>
+      <details><summary>Essential spending gap</summary><p>Estimated necessary spending in the planning window minus money already protected for essentials.</p></details>
+      <details><summary>Uncovered essentials</summary><p>The amount of near-term bills or necessities still unfunded after considering unassigned cash. A funding gap is a number to address, not a personal failure.</p></details>
+      <details><summary>Guided adjustments</summary><p>Dex recommends changes to flexible allocations; you approve or ignore them. Approved adjustments affect only this app's plan.</p></details>
+    </div>
+    <div class="card"><h2>About this beta</h2><p class="tiny">Pay modes are available, but automatic paycheck forecasting is not yet implemented. Bills roll forward only when you mark them paid in the Bills tab. Expenses entered separately do not automatically match bills. Tax reserves are estimates. This app is not a substitute for checking actual balances before paying bills or making financial decisions.</p></div>
+  </div>
+  </section>
+</main>
+<nav class="nav-shell" aria-label="Main navigation"><div class="tabs">
+  <button class="nav-btn active" type="button" data-tab="home" aria-current="page"><svg class="nav-icon" aria-hidden="true"><use href="#i-home"/></svg><span>Home</span></button>
+  <button class="nav-btn" type="button" data-tab="add"><svg class="nav-icon" aria-hidden="true"><use href="#i-plus"/></svg><span>Add</span></button>
+  <button class="nav-btn" type="button" data-tab="bills"><svg class="nav-icon" aria-hidden="true"><use href="#i-bills"/></svg><span>Bills</span></button>
+  <button class="nav-btn" type="button" data-tab="plan"><svg class="nav-icon" aria-hidden="true"><use href="#i-plan"/></svg><span>Plan</span></button>
+  <button class="nav-btn" type="button" data-tab="activity"><svg class="nav-icon" aria-hidden="true"><use href="#i-activity"/></svg><span>History</span></button>
+  <button class="nav-btn" type="button" data-tab="more"><svg class="nav-icon" aria-hidden="true"><use href="#i-more"/></svg><span>More</span></button>
+</div></nav>
+<div id="toast" class="feedback-toast" aria-live="polite" role="status"></div>
+<dialog id="tourModal" class="modal" aria-labelledby="tourTitle">
+  <small class="eyebrow" id="tourCount">WELCOME TO DEX</small><h2 id="tourTitle">Budgeting, without guesswork.</h2><div id="tourBody"></div>
+  <div class="dots" id="tourDots" aria-label="Walkthrough progress"></div>
+  <div class="actions"><button class="secondary" id="tourBack" type="button">Back</button><button id="tourNext" type="button">Next</button></div>
+  <button class="plainlink" id="tourSkip" type="button">Skip walkthrough</button>
+</dialog>
+<dialog id="infoModal" class="modal" aria-labelledby="infoTitle"><small class="eyebrow">QUICK EXPLANATION</small><h2 id="infoTitle"></h2><p id="helpBody"></p><button id="closeInfo" type="button">Got it</button></dialog>
+<script src="app.js"></script>
+</body>
+</html>
